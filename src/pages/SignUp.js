@@ -1,25 +1,31 @@
-// src/pages/SignUp.js
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-// Corrected: Import 'signUp' instead of 'registerUser'
-import { signUp } from '../api/backendApi'; // Assuming you have this API call
+import { signUp } from '../api/backendApi';
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+
+    const { firstName, lastName, email, password, confirmPassword } = formData;
 
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
@@ -28,18 +34,16 @@ const SignUp = () => {
     }
 
     try {
-      // Corrected: Call 'signUp' instead of 'registerUser'
-      const response = await signUp({ firstName, lastName, email, password }); // Assuming this returns { success, message, user, token }
+      const response = await signUp({ firstName, lastName, email, password });
 
       if (response.success) {
-        login(response.user, response.token);
-        navigate('/pricing');
+        // ✅ Redirect to confirm sign up page
+        navigate('/confirm-signup', { state: { email } });
       } else {
-        setError(response.message || 'Registration failed. Please try again.');
+        setError(response.message || 'Sign up failed.');
       }
     } catch (err) {
-      console.error('Registration error:', err);
-      setError('An unexpected error occurred during registration.');
+      setError(err.message || 'An unexpected error occurred.');
     } finally {
       setLoading(false);
     }
@@ -48,99 +52,72 @@ const SignUp = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-green-50 p-4 sm:p-6 lg:p-8">
       <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-        <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-8 gradient-text">
+        <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-8">
           Join AI Health
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-              First Name
-            </label>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="flex space-x-4">
             <input
               type="text"
-              id="firstName"
               name="firstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="First Name"
+              value={formData.firstName}
+              onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-              placeholder="John"
+              className="w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
             />
-          </div>
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-              Last Name
-            </label>
             <input
               type="text"
-              id="lastName"
               name="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Last Name"
+              value={formData.lastName}
+              onChange={handleChange}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-              placeholder="Doe"
+              className="w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
             />
           </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-              placeholder="••••••••"
-            />
-          </div>
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-              placeholder="••••••••"
-            />
-          </div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
+          />
+
           {error && (
-            <p className="text-sm text-red-600 text-center bg-red-50 p-2 rounded-md">{error}</p>
+            <p className="text-red-600 text-sm text-center bg-red-50 p-2 rounded-md">{error}</p>
           )}
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full btn-primary py-2.5 text-lg"
-            >
-              {loading ? 'Signing Up...' : 'Sign Up'}
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full btn-primary py-2.5 text-lg"
+          >
+            {loading ? 'Signing Up...' : 'Sign Up'}
+          </button>
         </form>
-        <p className="mt-8 text-center text-sm text-gray-600">
+
+        <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{' '}
           <Link to="/signin" className="font-medium text-purple-600 hover:text-purple-500 hover:underline">
             Sign In

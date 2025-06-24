@@ -1,16 +1,16 @@
-// src/pages/SignIn.js
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-// Corrected: Import 'signIn' instead of 'loginUser'
-import { signIn } from '../api/backendApi'; // Assuming you have this API call
+import { signIn } from '../api/backendApi';
+import { CognitoUser } from 'amazon-cognito-identity-js';
+import userPool from '../aws-config';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { setUser, setIsAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,21 +19,50 @@ const SignIn = () => {
     setLoading(true);
 
     try {
-      // Corrected: Call 'signIn' instead of 'loginUser'
-      const response = await signIn({ email, password }); // Assuming signIn returns { success, message, user, token }
+      const response = await signIn({ email, password });
 
       if (response.success) {
-        login(response.user, response.token);
-        navigate('/pricing');
+        setUser({ email, token: response.token });
+        setIsAuthenticated(true); // ✅ Ensure navbar updates
+        navigate('/home');
       } else {
-        setError(response.message || 'Login failed. Please check your credentials.');
+        if (response.message.includes('User is not confirmed')) {
+          navigate('/confirm-signup', { state: { email } });
+        } else {
+          setError(response.message || 'Login failed. Please check your credentials.');
+        }
       }
     } catch (err) {
-      console.error('Login error:', err);
-      setError('An unexpected error occurred during login.');
+      if (err.message && err.message.includes('User is not confirmed')) {
+        navigate('/confirm-signup', { state: { email } });
+      } else {
+        setError(err.message || 'An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleForgotPassword = () => {
+    if (!email) {
+      setError("Please enter your email to reset password.");
+      return;
+    }
+
+    const user = new CognitoUser({
+      Username: email,
+      Pool: userPool
+    });
+
+    user.forgotPassword({
+      onSuccess: () => {
+        alert("Password reset code sent to your email.");
+        navigate('/reset-password', { state: { email } });
+      },
+      onFailure: (err) => {
+        setError(err.message || "Failed to initiate password reset.");
+      },
+    });
   };
 
   return (
@@ -50,7 +79,6 @@ const SignIn = () => {
             <input
               type="email"
               id="email"
-              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -65,7 +93,6 @@ const SignIn = () => {
             <input
               type="password"
               id="password"
-              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -73,9 +100,7 @@ const SignIn = () => {
               placeholder="••••••••"
             />
           </div>
-          {error && (
-            <p className="text-sm text-red-600 text-center bg-red-50 p-2 rounded-md">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-600 text-center bg-red-50 p-2 rounded-md">{error}</p>}
           <div>
             <button
               type="submit"
@@ -86,6 +111,14 @@ const SignIn = () => {
             </button>
           </div>
         </form>
+        <div className="text-center mt-4">
+          <button
+            onClick={handleForgotPassword}
+            className="text-sm text-purple-600 hover:underline focus:outline-none"
+          >
+            Forgot Password?
+          </button>
+        </div>
         <p className="mt-8 text-center text-sm text-gray-600">
           Don't have an account?{' '}
           <Link to="/signup" className="font-medium text-purple-600 hover:text-purple-500 hover:underline">

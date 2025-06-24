@@ -1,9 +1,20 @@
+// src/pages/About.js
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const About = () => {
+  const navigate = useNavigate();
+
+  // Ensure the page scrolls to the top when first loaded or navigated to
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const team = [
     {
       name: "Dr. Sarah Chen",
       role: "CEO & Co-Founder",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b9e7a8c3?w=300&h=300&fit=crop&crop=face",
+      image: "https://images.pexels.com/photos/8374294/pexels-photo-8374294.jpeg?auto=compress&cs=tinysrgb&w=600",
       bio: "Former Google AI researcher with PhD in Machine Learning. Passionate about using AI to improve health outcomes.",
       linkedin: "#"
     },
@@ -93,12 +104,29 @@ const About = () => {
                 <span className="text-gray-900">with AI</span>
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed">
-                We believe everyone deserves personalized health and fitness guidance. Our mission is to make 
+                We believe everyone deserves personalized health and fitness guidance. Our mission is to make
                 AI-powered wellness accessible, effective, and enjoyable for people of all fitness levels.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="btn-primary">Join Our Mission</button>
-                <button className="btn-secondary">Learn More</button>
+                {/* Hero Section Buttons */}
+                <button
+                  onClick={() => {
+                    navigate('/signup'); // Navigates to signup page
+                    window.scrollTo(0, 0);
+                  }}
+                  className="btn-primary"
+                >
+                  Join Our Mission
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/how-it-works'); // Navigates to how it works page
+                    window.scrollTo(0, 0);
+                  }}
+                  className="btn-secondary"
+                >
+                  Learn More
+                </button>
               </div>
             </div>
 
@@ -143,29 +171,29 @@ const About = () => {
           <div className="space-y-12">
             <div className="prose prose-lg mx-auto text-gray-600">
               <p className="text-xl leading-relaxed">
-                Founded in 2022 by a team of AI researchers, nutritionists, and fitness experts, 
-                AI FitPlanner was born from a simple observation: despite the abundance of health 
-                and fitness information available, most people still struggle to find plans that 
+                Founded in 2022 by a team of AI researchers, nutritionists, and fitness experts,
+                AI FitPlanner was born from a simple observation: despite the abundance of health
+                and fitness information available, most people still struggle to find plans that
                 work for their unique circumstances.
               </p>
-              
+
               <p className="text-lg leading-relaxed">
-                We realized that the missing piece wasn't more information—it was personalization. 
-                Everyone's body, lifestyle, preferences, and goals are different. What works for 
+                We realized that the missing piece wasn't more information—it was personalization.
+                Everyone's body, lifestyle, preferences, and goals are different. What works for
                 one person might not work for another. That's where AI comes in.
               </p>
-              
+
               <p className="text-lg leading-relaxed">
-                Our proprietary AI system learns from millions of data points to understand what 
-                makes an effective plan for each individual. We combine this with evidence-based 
-                nutritional science and exercise physiology to create truly personalized 
+                Our proprietary AI system learns from millions of data points to understand what
+                makes an effective plan for each individual. We combine this with evidence-based
+                nutritional science and exercise physiology to create truly personalized
                 recommendations that adapt as you progress.
               </p>
-              
+
               <p className="text-lg leading-relaxed">
-                Today, we're proud to serve over 500,000 users worldwide, helping them achieve 
-                their health and fitness goals with personalized AI guidance. But we're just 
-                getting started. Our vision is to make personalized health and fitness guidance 
+                Today, we're proud to serve over 500,000 users worldwide, helping them achieve
+                their health and fitness goals with personalized AI guidance. But we're just
+                getting started. Our vision is to make personalized health and fitness guidance
                 accessible to everyone, everywhere.
               </p>
             </div>
@@ -236,7 +264,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section (Footer-like) */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 via-blue-600 to-green-600">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
@@ -246,10 +274,22 @@ const About = () => {
             Be part of the AI fitness revolution. Start your personalized journey today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <button
+              onClick={() => {
+                navigate('/signup'); // Navigates to signup page
+                window.scrollTo(0, 0); // Scrolls to top
+              }}
+              className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
               Start Free Trial
             </button>
-            <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300">
+            <button
+              onClick={() => {
+                navigate('/how-it-works'); // Navigates to how it works page
+                window.scrollTo(0, 0); // Scrolls to top
+              }}
+              className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300"
+            >
               Learn More
             </button>
           </div>

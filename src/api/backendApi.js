@@ -1,177 +1,126 @@
-// src/api/backendApi.js
+import {
+  CognitoUser,
+  CognitoUserAttribute,
+  AuthenticationDetails,
+} from 'amazon-cognito-identity-js';
+import userPool from '../aws-config';
 
-// Simulate a database of users and their diet plans
-const mockUsers = {
-  "test@example.com": {
-    userId: "user_test_123",
-    email: "test@example.com",
-    password: "password123", // In a real app, never store plain passwords
-    dietPlans: [], // Array to store multiple diet plans
-  },
-};
+// ✅ Use environment variable for backend URL
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001';
 
-let nextUserId = 1000; // For new sign-ups
+console.log('🔗 Backend URL:', API_BASE_URL); // Debug log
 
-// Helper to generate a unique plan ID
-const generatePlanId = () => `plan_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+// SIGN UP
+export const signUp = ({ firstName, lastName, email, password }) => {
+  const attributeList = [
+    new CognitoUserAttribute({ Name: 'email', Value: email }),
+    new CognitoUserAttribute({ Name: 'given_name', Value: firstName }),
+    new CognitoUserAttribute({ Name: 'family_name', Value: lastName }),
+  ];
 
-// Helper to generate a mock diet plan based on some user info (for demonstration)
-const createMockDietPlan = (userId, preferences = {}) => {
-  const baseCalories = preferences.calories || Math.floor(Math.random() * (2500 - 1800 + 1)) + 1800; // 1800-2500
-  const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  const time = new Date().toLocaleTimeString('en-US');
-
-  return {
-    id: generatePlanId(),
-    userId: userId,
-    date: date,
-    generatedAt: `${date} ${time}`,
-    calories: baseCalories,
-    macronutrients: {
-      protein: `${Math.round(baseCalories * 0.30 / 4)}g`, // 30% protein
-      carbs: `${Math.round(baseCalories * 0.40 / 4)}g`,   // 40% carbs
-      fats: `${Math.round(baseCalories * 0.30 / 9)}g`,     // 30% fats
-    },
-    notes: `This plan is a dynamic recommendation based on your last input and current goals. Keep hydrating!`,
-    meals: [
-      { time: "7:00 AM", item: "Breakfast", description: "Oatmeal with berries and nuts, protein shake." },
-      { time: "10:00 AM", item: "Morning Snack", description: "Apple slices with almond butter." },
-      { time: "1:00 PM", item: "Lunch", description: "Grilled chicken salad with mixed greens and vinaigrette." },
-      { time: "4:00 PM", item: "Afternoon Snack", description: "Greek yogurt with a sprinkle of seeds." },
-      { time: "7:00 PM", item: "Dinner", description: "Baked salmon with quinoa and steamed asparagus." },
-    ],
-  };
-};
-
-/**
- * Mocks user sign-up.
- * @param {object} userData - User registration data (email, password, fitness goals, etc.).
- * @returns {Promise<object>} - A promise resolving to { success: boolean, user?: object, message?: string }.
- */
-export const signUp = async (userData) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (mockUsers[userData.email]) {
-        resolve({ success: false, message: "User with this email already exists." });
-      } else {
-        const newUser = {
-          userId: `user_${nextUserId++}`,
-          email: userData.email,
-          password: userData.password,
-          ...userData, // Store all user data from signup form
-          dietPlans: [],
-        };
-        // Generate an initial diet plan upon sign-up
-        const initialPlan = createMockDietPlan(newUser.userId, {
-          calories: 2000, // Example: base calories off user input from sign-up form later
-          goals: userData.fitnessGoals,
-        });
-        newUser.dietPlans.push(initialPlan); // Add the initial plan
-        mockUsers[userData.email] = newUser;
-        console.log("Mock User Database:", mockUsers);
-        resolve({ success: true, user: newUser, message: "Sign up successful." });
-      }
-    }, 1000);
+  return new Promise((resolve, reject) => {
+    userPool.signUp(email, password, attributeList, null, (err, result) => {
+      if (err) return reject({ success: false, message: err.message });
+      resolve({ success: true, user: result.user });
+    });
   });
 };
 
-/**
- * Mocks user sign-in.
- * @param {object} credentials - User sign-in credentials (email, password).
- * @returns {Promise<object>} - A promise resolving to { success: boolean, user?: object, message?: string }.
- */
-export const signIn = async (credentials) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const user = mockUsers[credentials.email];
-      // Hardcoded check for 'test@example.com' for simplicity
-      if (user && user.password === credentials.password) {
-        resolve({ success: true, user: user, message: "Sign in successful." });
-      } else {
-        resolve({ success: false, message: "Invalid credentials." });
-      }
-    }, 1000);
+// SIGN IN
+export const signIn = ({ email, password }) => {
+  const user = new CognitoUser({ Username: email, Pool: userPool });
+  const authDetails = new AuthenticationDetails({ Username: email, Password: password });
+
+  return new Promise((resolve, reject) => {
+    user.authenticateUser(authDetails, {
+      onSuccess: (result) => {
+        const token = result.getIdToken().getJwtToken();
+        resolve({ success: true, user: email, token });
+      },
+      onFailure: (err) => {
+        reject({ success: false, message: err.message });
+      },
+    });
   });
 };
 
-/**
- * Mocks fetching a user's *current* diet plan.
- * This will now fetch the latest plan.
- * @param {string} userId - The ID of the user.
- * @returns {Promise<object>} - A promise resolving to { success: boolean, plan?: object, message?: string }.
- */
-export const getDietPlan = async (userId) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const userEmail = Object.keys(mockUsers).find(
-        (email) => mockUsers[email].userId === userId
-      );
-      const user = mockUsers[userEmail];
-      if (user && user.dietPlans.length > 0) {
-        // Return the latest plan
-        const latestPlan = user.dietPlans[user.dietPlans.length - 1];
-        resolve({ success: true, plan: latestPlan });
-      } else if (user) {
-        resolve({ success: false, message: "No diet plans found for this user." });
-      }
-      else {
-        resolve({ success: false, message: "User not found." });
-      }
-    }, 500);
+// CONFIRM SIGN UP
+export const confirmSignUp = (email, code) => {
+  const user = new CognitoUser({ Username: email, Pool: userPool });
+
+  return new Promise((resolve, reject) => {
+    user.confirmRegistration(code, true, (err, result) => {
+      if (err) return reject({ success: false, message: err.message });
+      resolve({ success: true, message: result });
+    });
   });
 };
 
-/**
- * Mocks generating a new diet plan for a user.
- * @param {string} userId - The ID of the user.
- * @param {object} [preferences] - Optional preferences for the new plan.
- * @returns {Promise<object>} - A promise resolving to { success: boolean, plan?: object, message?: string }.
- */
-export const generateNewDietPlan = async (userId, preferences = {}) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const userEmail = Object.keys(mockUsers).find(
-        (email) => mockUsers[email].userId === userId
-      );
-      const user = mockUsers[userEmail];
-      if (user) {
-        const newPlan = createMockDietPlan(userId, preferences);
-        user.dietPlans.push(newPlan); // Add to the user's plans
-        resolve({ success: true, plan: newPlan, message: "New diet plan generated." });
-      } else {
-        resolve({ success: false, message: "User not found." });
-      }
-    }, 1500); // Simulate some processing time
+// RESEND CONFIRMATION CODE
+export const resendConfirmationCode = (email) => {
+  const user = new CognitoUser({ Username: email, Pool: userPool });
+
+  return new Promise((resolve, reject) => {
+    user.resendConfirmationCode((err, result) => {
+      if (err) return reject({ success: false, message: err.message });
+      resolve({ success: true, message: result });
+    });
   });
 };
 
-/**
- * Mocks fetching all previously generated diet plans for a user.
- * @param {string} userId - The ID of the user.
- * @returns {Promise<object>} - A promise resolving to { success: boolean, plans?: Array<object>, message?: string }.
- */
-export const getDietPlanHistory = async (userId) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const userEmail = Object.keys(mockUsers).find(
-        (email) => mockUsers[email].userId === userId
-      );
-      const user = mockUsers[userEmail];
-      if (user) {
-        // Return plans in reverse chronological order (latest first)
-        const sortedPlans = [...user.dietPlans].reverse();
-        resolve({ success: true, plans: sortedPlans });
-      } else {
-        resolve({ success: false, message: "User not found or no plans available." });
-      }
-    }, 700);
-  });
+// ✅ FIXED: Generate Diet Plan (Updated to work with your existing backend)
+export const generateDietPlan = async (payload) => {
+  try {
+    console.log('🚀 Calling API:', `${API_BASE_URL}/api/generate-diet-plan`);
+    console.log('📤 Payload:', payload);
+
+    const res = await fetch(`${API_BASE_URL}/api/generate-diet-plan`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    console.log('📥 Response status:', res.status);
+
+    const data = await res.json();
+    console.log('📥 Response data:', data);
+
+    if (!res.ok || !data.success) {
+      return { success: false, message: data.message || 'Failed to generate diet plan.' };
+    }
+
+    return { success: true, plan: data.plan };
+  } catch (err) {
+    console.error('❌ API Error:', err);
+    return { success: false, message: err.message || 'Failed to generate diet plan.' };
+  }
 };
 
-// You can uncomment this to add a default user for testing without signing up every time
-/*
-// Ensure the test user has an initial plan when the app starts
-if (mockUsers["test@example.com"].dietPlans.length === 0) {
-  mockUsers["test@example.com"].dietPlans.push(createMockDietPlan("user_test_123"));
-}
-*/
+// ✅ FIXED: Get Diet Plan History (Updated to work with your existing backend)
+export const getDietPlanHistory = async (email) => {
+  try {
+    console.log('🚀 Fetching history for:', email);
+    
+    const res = await fetch(`${API_BASE_URL}/api/diet-history/${encodeURIComponent(email)}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log('📥 History response status:', res.status);
+
+    const data = await res.json();
+    console.log('📥 History data:', data);
+
+    if (!res.ok || !data.success) {
+      return { success: false, message: data.message || 'Failed to fetch history.' };
+    }
+
+    return { success: true, history: data.history };
+  } catch (err) {
+    console.error('❌ History API Error:', err);
+    return { success: false, message: err.message || 'Failed to fetch history.' };
+  }
+};

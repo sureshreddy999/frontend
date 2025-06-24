@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 
 const Blog = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const categories = ['All', 'Nutrition', 'Fitness', 'AI Technology', 'Success Stories', 'Tips & Tricks'];
@@ -15,7 +17,9 @@ const Blog = () => {
       author: "Dr. Sarah Chen",
       date: "March 15, 2024",
       readTime: "8 min read",
-      tags: ["AI", "Nutrition", "Science"]
+      tags: ["AI", "Nutrition", "Science"],
+      // Added a placeholder Wikipedia URL for this post
+      wikiLink: "https://en.wikipedia.org/wiki/Nutrition"
     },
     {
       id: 2,
@@ -26,7 +30,9 @@ const Blog = () => {
       author: "Mike Rodriguez",
       date: "March 12, 2024",
       readTime: "6 min read",
-      tags: ["Workouts", "Flexibility", "AI"]
+      tags: ["Workouts", "Flexibility", "AI"],
+      // Added a placeholder Wikipedia URL for this post
+      wikiLink: "https://en.wikipedia.org/wiki/Physical_exercise"
     },
     {
       id: 3,
@@ -37,7 +43,9 @@ const Blog = () => {
       author: "Emily Watson",
       date: "March 10, 2024",
       readTime: "5 min read",
-      tags: ["Weight Loss", "Success", "Transformation"]
+      tags: ["Weight Loss", "Success", "Transformation"],
+      // Added a placeholder Wikipedia URL for this post
+      wikiLink: "https://en.wikipedia.org/wiki/Weight_loss"
     },
     {
       id: 4,
@@ -48,7 +56,9 @@ const Blog = () => {
       author: "Dr. Emily Watson",
       date: "March 8, 2024",
       readTime: "10 min read",
-      tags: ["Nutrition", "Macros", "Education"]
+      tags: ["Nutrition", "Macros", "Education"],
+      // Added a placeholder Wikipedia URL for this post
+      wikiLink: "https://en.wikipedia.org/wiki/Macronutrient"
     },
     {
       id: 5,
@@ -59,7 +69,9 @@ const Blog = () => {
       author: "James Park",
       date: "March 5, 2024",
       readTime: "7 min read",
-      tags: ["AI", "Future", "Fitness"]
+      tags: ["AI", "Future", "Fitness"],
+      // Added a placeholder Wikipedia URL for this post
+      wikiLink: "https://en.wikipedia.org/wiki/Artificial_intelligence"
     },
     {
       id: 6,
@@ -70,16 +82,26 @@ const Blog = () => {
       author: "Mike Rodriguez",
       date: "March 3, 2024",
       readTime: "4 min read",
-      tags: ["Motivation", "Psychology", "Tips"]
+      tags: ["Motivation", "Psychology", "Tips"],
+      // Added a placeholder Wikipedia URL for this post
+      wikiLink: "https://en.wikipedia.org/wiki/Motivation"
     }
   ];
 
-  const featuredPost = blogPosts[0];
-  const regularPosts = blogPosts.slice(1);
+  const featuredPost = blogPosts[0]; // The featured post is the first one in the array
+  const regularPosts = blogPosts.slice(1); // Regular posts are the rest
 
-  const filteredPosts = selectedCategory === 'All' 
-    ? regularPosts 
+  const filteredPosts = selectedCategory === 'All'
+    ? regularPosts
     : regularPosts.filter(post => post.category === selectedCategory);
+
+  // Function to handle navigation to a specific URL
+  const handleReadMoreClick = (url) => {
+    // Using window.open for external links to open in a new tab,
+    // as per common UX for external navigation.
+    // If you prefer to navigate within the same tab, you can use navigate(url);
+    window.open(url, '_blank');
+  };
 
   return (
     <div className="min-h-screen pt-16">
@@ -94,7 +116,7 @@ const Blog = () => {
             <span className="text-gray-900">Blog</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Insights, tips, and stories from the world of AI-powered fitness and nutrition. 
+            Insights, tips, and stories from the world of AI-powered fitness and nutrition.
             Stay updated with the latest trends and success stories.
           </p>
         </div>
@@ -106,7 +128,7 @@ const Blog = () => {
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Article</h2>
           </div>
-          
+
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden lg:grid lg:grid-cols-2 lg:gap-8">
             <div className="relative h-64 lg:h-auto">
               <img
@@ -120,7 +142,7 @@ const Blog = () => {
                 </span>
               </div>
             </div>
-            
+
             <div className="p-8 lg:p-12">
               <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
                 <span>{featuredPost.author}</span>
@@ -129,10 +151,10 @@ const Blog = () => {
                 <span>•</span>
                 <span>{featuredPost.readTime}</span>
               </div>
-              
+
               <h3 className="text-3xl font-bold text-gray-900 mb-4">{featuredPost.title}</h3>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">{featuredPost.excerpt}</p>
-              
+
               <div className="flex flex-wrap gap-2 mb-6">
                 {featuredPost.tags.map((tag, index) => (
                   <span key={index} className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">
@@ -140,8 +162,12 @@ const Blog = () => {
                   </span>
                 ))}
               </div>
-              
-              <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300">
+
+              {/* Modified: Added onClick handler to the button */}
+              <button
+                onClick={() => handleReadMoreClick(featuredPost.wikiLink)}
+                className="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300"
+              >
                 Read Full Article
               </button>
             </div>
@@ -188,17 +214,17 @@ const Blog = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="p-6">
                   <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
                     <span>{post.author}</span>
                     <span>•</span>
                     <span>{post.date}</span>
                   </div>
-                  
+
                   <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">{post.title}</h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">{post.excerpt}</p>
-                  
+
                   <div className="flex flex-wrap gap-2 mb-4">
                     {post.tags.map((tag, index) => (
                       <span key={index} className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
@@ -206,10 +232,14 @@ const Blog = () => {
                       </span>
                     ))}
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">{post.readTime}</span>
-                    <button className="text-purple-600 hover:text-purple-800 font-medium transition-colors">
+                    {/* Modified: Added onClick handler to the button */}
+                    <button
+                      onClick={() => handleReadMoreClick(post.wikiLink)}
+                      className="text-purple-600 hover:text-purple-800 font-medium transition-colors"
+                    >
                       Read More →
                     </button>
                   </div>
@@ -229,7 +259,7 @@ const Blog = () => {
           <p className="text-xl text-white/90 mb-8">
             Get the latest articles, tips, and success stories delivered to your inbox weekly.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
             <input
               type="email"
@@ -240,7 +270,7 @@ const Blog = () => {
               Subscribe
             </button>
           </div>
-          
+
           <p className="text-white/70 text-sm mt-4">
             No spam, unsubscribe at any time. Privacy policy applies.
           </p>

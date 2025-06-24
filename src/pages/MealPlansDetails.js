@@ -62,7 +62,7 @@ const MealPlansDetails = () => {
             {/* Meal Example 1 */}
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1504544252329-8730b296b02a?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://images.unsplash.com/photo-1676300184021-96fa00e1a987?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Salmon with Roasted Vegetables"
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />
@@ -78,7 +78,7 @@ const MealPlansDetails = () => {
             {/* Meal Example 2 */}
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1512621776951-a5783dbd8e20?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://images.pexels.com/photos/16123121/pexels-photo-16123121/free-photo-of-salad-in-bowl.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                 alt="Quinoa Salad with Chickpeas"
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />
@@ -94,7 +94,7 @@ const MealPlansDetails = () => {
             {/* Meal Example 3 */}
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1555939594-58d7d91d0637?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://cdn.pixabay.com/photo/2016/04/25/07/32/chicken-cutlet-1351331_1280.jpg"
                 alt="Chicken Stir-fry"
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />
@@ -121,8 +121,8 @@ const MealPlansDetails = () => {
           </p>
           <Link
             to="/signup"
-            className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-          >
+            className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 line-height:2.5" 
+          > 
             Get Started Now
           </Link>
         </div>

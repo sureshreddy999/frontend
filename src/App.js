@@ -20,6 +20,13 @@ import CurrentDietPlan from './pages/CurrentDietPlan';
 import DietPlanHistory from './pages/DietPlanHistory';
 import MealPlansDetails from './pages/MealPlansDetails';
 import WorkoutRoutinesDetails from './pages/WorkoutRoutinesDetails';
+import AIChatAssistantDetails from './pages/AIChatAssistantDetails';
+import ConfirmSignUp from './pages/ConfirmSignUp';
+import ResetPassword from './pages/ResetPassword';
+import UserDetails from './pages/UserDetails';
+
+
+
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useContext(AuthContext);
@@ -40,7 +47,8 @@ function App() {
     <div className="App">
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Navigate to="/home" replace />} /> 
+        <Route path="/home" element={<Home />} />
         <Route path="/features" element={<Features />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/pricing" element={<Pricing />} />
@@ -55,6 +63,12 @@ function App() {
         <Route path="/meal-plans-details" element={<PrivateRoute><MealPlansDetails /></PrivateRoute>} />
         <Route path="/features/meal-plans" element={<MealPlansDetails />} />
         <Route path="/features/workout-routines" element={<WorkoutRoutinesDetails />} />
+        <Route path="/features/ai-chat-assistant" element={<AIChatAssistantDetails />} />
+        <Route path="/confirm-signup" element={<ConfirmSignUp />} />
+        <Route path="/reset-password" element={<ResetPassword />} /> 
+        <Route path="/user-details" element={<UserDetails />} />
+
+        
       </Routes>
       <ChatBot />
     </div>

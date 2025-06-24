@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 const Features = () => {
+  const navigate = useNavigate();
+
   const features = [
     {
       title: "Personalized Meal Plans",
@@ -149,9 +153,9 @@ const Features = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <div>
+                </svg>
+              </div>
+              <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Science-Based</h3>
                   <p className="text-gray-600">All recommendations are backed by peer-reviewed research and nutritional science.</p>
                 </div>
@@ -180,10 +184,16 @@ const Features = () => {
             Start your free trial today and discover how AI can transform your fitness journey.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <button
+              onClick={() => { navigate('/signup'); window.scrollTo(0, 0); }} // Added scroll to top
+              className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
               Start Free Trial
             </button>
-            <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300">
+            <button
+              onClick={() => { navigate('/how-it-works'); window.scrollTo(0, 0); }} // Added scroll to top
+              className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300"
+            >
               Learn More
             </button>
           </div>

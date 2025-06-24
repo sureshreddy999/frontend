@@ -70,7 +70,7 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* Your Personalized Tools Section */}
+      {/* Features Section - Simplified for Dashboard */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-gray-900 text-center mb-12">
@@ -119,48 +119,8 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* NEW: Why Choose AI Health? Features Section (from Home.js) */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50"> {/* Changed background from white to gray-50 for visual separation */}
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 text-center mb-12">
-            Why Choose AI Health?
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-8 rounded-2xl shadow-lg text-center card-hover border border-gray-100">
-              <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 rounded-full inline-flex mb-6">
-                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Personalized Meal Plans</h3>
-              <p className="text-gray-700">Get AI-generated meal plans tailored to your goals, dietary needs, and preferences.</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-green-50 p-8 rounded-2xl shadow-lg text-center card-hover border border-gray-100">
-              <div className="bg-gradient-to-r from-blue-600 to-green-600 p-4 rounded-full inline-flex mb-6">
-                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H4a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v10m-2 2h2m-4 0h4m-10 0h4m-2 0v-2.167a4.002 4.002 0 00-3.256-3.954L9 14V7m-5 4h4m-4 0H9m7 4v-2.167a4.002 4.002 0 00-3.256-3.954L15 14V7m-5 4h2" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Adaptive Workout Routines</h3>
-              <p className="text-gray-700">Receive adaptive workout plans that fit your current fitness level, equipment, and schedule.</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-purple-50 p-8 rounded-2xl shadow-lg text-center card-hover border border-gray-100">
-              <div className="bg-gradient-to-r from-green-600 to-purple-600 p-4 rounded-full inline-flex mb-6">
-                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">AI Chat Assistant</h3>
-              <p className="text-gray-700">Get instant answers to your fitness and nutrition questions from our intelligent AI assistant.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white"> {/* Changed background from gray-50 to white to alternate */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-gray-900 text-center mb-12">
             What Our Users Say
@@ -189,7 +149,7 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* CTA Section - Adapted for Authenticated User */}
+      {/* CTA Section - Adapted */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 via-blue-600 to-green-600">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-4xl md:text-5xl font-bold text-white">

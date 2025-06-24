@@ -1,69 +1,100 @@
-// src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { CognitoUserPool } from 'amazon-cognito-identity-js';
+import userPool from '../aws-config';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null); // Stores user data like { id, email, firstName, tier }
-  const [isLoading, setIsLoading] = useState(true); // To handle initial auth check
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate checking for a token in localStorage
-    const token = localStorage.getItem('authToken');
-    const storedUser = localStorage.getItem('user');
+    const currentUser = userPool.getCurrentUser();
 
-    if (token && storedUser) {
-      try {
-        const userData = JSON.parse(storedUser);
-        setIsAuthenticated(true);
-        setUser(userData);
-      } catch (e) {
-        console.error("Failed to parse user data from localStorage:", e);
-        // Clear invalid data
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-        setIsAuthenticated(false);
-        setUser(null);
-      }
+    if (!currentUser) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false); // Authentication check is complete
+
+    currentUser.getSession(async (err, session) => {
+      if (err || !session.isValid()) {
+        setUser(null);
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
+
+      currentUser.getUserAttributes(async (err, attributes) => {
+        if (err) {
+          console.error("Failed to get user attributes", err);
+          setUser({ email: currentUser.getUsername() });
+          setIsAuthenticated(true);
+          setIsLoading(false);
+          return;
+        }
+
+        const attrMap = {};
+        attributes.forEach(attr => {
+          attrMap[attr.getName()] = attr.getValue();
+        });
+
+        const email = attrMap.email;
+        let profilePhotoUrl = null;
+        let firstName = '';
+        let lastName = '';
+        let createdAt = null;
+
+        try {
+          const response = await fetch(`http://localhost:5001/api/user-profile-photo/${email}`);
+          const data = await response.json();
+          profilePhotoUrl = data.photoUrl || null;
+          firstName = data.firstName || '';
+          lastName = data.lastName || '';
+          createdAt = data.createdAt || null;
+        } catch (error) {
+          console.error('❌ Failed to load profile data from backend:', error);
+        }
+
+        // Fallback to Cognito values if backend values are missing
+        if (!firstName) firstName = attrMap.given_name || '';
+        if (!lastName) lastName = attrMap.family_name || '';
+
+        setUser({
+          email,
+          givenName: firstName,
+          familyName: lastName,
+          name: `${firstName} ${lastName}`.trim(),
+          profilePhotoUrl,
+          createdAt: createdAt || attrMap.updated_at || null
+        });
+
+        setIsAuthenticated(true);
+        setIsLoading(false);
+      });
+    });
   }, []);
 
-  const login = (userData, token) => {
-    localStorage.setItem('authToken', token);
-    localStorage.setItem('user', JSON.stringify(userData));
-    setIsAuthenticated(true);
-    setUser(userData);
-  };
-
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
+  const signOut = () => {
+    const currentUser = userPool.getCurrentUser();
+    if (currentUser) currentUser.signOut();
     setUser(null);
-    navigate('/signin'); // Redirect to sign-in page after logout
-  };
-
-  // Function to update user data (e.g., after a tier upgrade)
-  const updateUser = (newUserData) => {
-    localStorage.setItem('user', JSON.stringify(newUserData));
-    setUser(newUserData);
-  };
-
-  const authContextValue = {
-    isAuthenticated,
-    user,
-    isLoading,
-    login,
-    logout,
-    updateUser,
+    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={authContextValue}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        setUser,
+        setIsAuthenticated,
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -7,7 +7,7 @@ const Home = () => {
     {
       name: "Sarah Johnson",
       role: "Fitness Enthusiast",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b9e7a8c3?w=150&h=150&fit=crop&crop=face",
+      image: "https://cdn.leonardo.ai/users/c8bb237e-a13a-4ba6-a120-a808584e499d/generations/2e49ce65-49c4-426a-a9e5-951223ce2955/segments/3:4:1/Flux_Dev_a_warm_and_inviting_portrait_of_a_woman_with_a_bright_2.jpg",
       text: "This AI planner transformed my fitness journey! The personalized meal plans are incredible."
     },
     {
@@ -28,8 +28,8 @@ const Home = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-blue-50 to-green-50 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-20">
-          <svg className="w-full h-full" fill="none" viewBox="0 0 1200 600">
+        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+          <svg className="w-full h-full" fill="none" viewBox="0 0 1200 600" aria-hidden="true">
             <defs>
               <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
                 <stop offset="0%" stopColor="#d8b4fe" />
@@ -125,13 +125,14 @@ const Home = () => {
                   src={testimonial.image}
                   alt={testimonial.name}
                   className="w-24 h-24 rounded-full mx-auto mb-6 object-cover shadow-md border-4 border-white animation-float"
+                  loading="lazy"
                 />
                 <p className="text-lg text-gray-700 mb-4 italic">"{testimonial.text}"</p>
                 <p className="font-bold text-gray-900">{testimonial.name}</p>
                 <p className="text-sm text-purple-600">{testimonial.role}</p>
-                <div className="flex justify-center mt-4 text-yellow-400">
+                <div className="flex justify-center mt-4 text-yellow-400" aria-label="User rating: 5 stars">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -171,4 +172,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home

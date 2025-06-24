@@ -40,7 +40,7 @@ const WorkoutRoutinesDetails = () => {
           </div>
           <div>
             <img
-              src="https://images.unsplash.com/photo-1571019613454-1cb2f99f2b47?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src="https://cdn.pixabay.com/photo/2016/11/22/22/24/adult-1850925_1280.jpg"
               alt="Adaptive Workout"
               className="rounded-2xl shadow-xl w-full h-auto object-cover border border-gray-100"
             />
@@ -62,7 +62,7 @@ const WorkoutRoutinesDetails = () => {
             {/* Workout Type 1 */}
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1601422718131-01f1437340d8?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://cdn.pixabay.com/photo/2017/08/07/14/02/man-2604149_1280.jpg"
                 alt="Strength Training"
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />
@@ -78,7 +78,7 @@ const WorkoutRoutinesDetails = () => {
             {/* Workout Type 2 */}
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1587977461971-464a938c1130?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://cdn.pixabay.com/photo/2021/11/10/06/23/workout-6783020_1280.jpg"
                 alt="Cardio Workout"
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />
@@ -94,7 +94,7 @@ const WorkoutRoutinesDetails = () => {
             {/* Workout Type 3 */}
             <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
               <img
-                src="https://images.unsplash.com/photo-1549448377-50a98f455325?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://cdn.pixabay.com/photo/2018/01/01/01/56/yoga-3053488_1280.jpg"
                 alt="Flexibility and Mobility"
                 className="w-full h-48 object-cover rounded-xl mb-4"
               />

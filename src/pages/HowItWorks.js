@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 const HowItWorks = () => {
+  const navigate = useNavigate();
+
   const steps = [
     {
       number: "01",
@@ -184,10 +188,16 @@ const HowItWorks = () => {
             Join thousands who have transformed their lives with AI-powered fitness and nutrition planning.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <button
+              onClick={() => { navigate('/signup'); window.scrollTo(0, 0); }} // Added scroll to top
+              className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
               Start Free Trial
             </button>
-            <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300">
+            <button
+              onClick={() => { navigate('/pricing'); window.scrollTo(0, 0); }} // Added scroll to top
+              className="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300"
+            >
               View Pricing
             </button>
           </div>
