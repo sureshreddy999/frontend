@@ -1,8 +1,13 @@
 // src/pages/WorkoutRoutinesDetails.js
-import React from 'react';
+import React, { useEffect } from 'react'; // Import useEffect
 import { Link } from 'react-router-dom';
 
 const WorkoutRoutinesDetails = () => {
+  // New useEffect hook to scroll to the top of the page on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -15,10 +20,10 @@ const WorkoutRoutinesDetails = () => {
             From beginners to advanced, our AI crafts routines that evolve with your progress and goals.
           </p>
           <Link
-            to="/signup"
+            to="/ExercisesPage"
             className="btn-primary transform hover:-translate-y-1"
           >
-            Design Your Workout
+            Suggested Exercises
           </Link>
         </div>
       </section>

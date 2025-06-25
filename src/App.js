@@ -24,6 +24,7 @@ import AIChatAssistantDetails from './pages/AIChatAssistantDetails';
 import ConfirmSignUp from './pages/ConfirmSignUp';
 import ResetPassword from './pages/ResetPassword';
 import UserDetails from './pages/UserDetails';
+import ExercisesPage from './pages/ExercisesPage';
 
 
 
@@ -67,6 +68,7 @@ function App() {
         <Route path="/confirm-signup" element={<ConfirmSignUp />} />
         <Route path="/reset-password" element={<ResetPassword />} /> 
         <Route path="/user-details" element={<UserDetails />} />
+        <Route path="/ExercisesPage" element={<ExercisesPage />} />
 
         
       </Routes>
