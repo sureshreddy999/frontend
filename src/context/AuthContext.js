@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import userPool from '../aws-config';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001';
+
 
 export const AuthContext = createContext();
 
@@ -48,7 +50,7 @@ export const AuthProvider = ({ children }) => {
         let createdAt = null;
 
         try {
-          const response = await fetch(`http://localhost:5001/api/user-profile-photo/${email}`);
+          const response = await fetch(`${API_BASE_URL}/api/user-profile-photo/${email}`);
           const data = await response.json();
           profilePhotoUrl = data.photoUrl || null;
           firstName = data.firstName || '';
