@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://backend-j0jr.onrender.com';
+
 
 const UserDetails = () => {
   const { user, isAuthenticated, setUser } = useContext(AuthContext);
@@ -14,7 +16,7 @@ const UserDetails = () => {
 
   useEffect(() => {
     if (user?.email) {
-      axios.get(`http://localhost:5001/api/user-profile-photo/${encodeURIComponent(user.email)}`)
+      axios.get(`${API_BASE_URL}/api/user-profile-photo/${encodeURIComponent(user.email)}`)
         .then(res => {
           const { photoUrl, firstName, lastName, createdAt } = res.data;
           setFirstName(firstName);
@@ -59,7 +61,7 @@ const UserDetails = () => {
     formData.append('lastName', lastName);
 
     try {
-      const res = await axios.post('http://localhost:5001/api/upload-profile-photo', formData);
+      const res = await axios.post(`${API_BASE_URL}/api/upload-profile-photo`, formData);
       const imageUrl = res.data.imageUrl;
 
       setPhotoPreview(imageUrl);
