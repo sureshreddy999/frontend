@@ -6,7 +6,7 @@ import {
 import userPool from '../aws-config';
 
 // ✅ Use environment variable for backend URL
-const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://backend-j0jr.onrender.com';
 
 console.log('🔗 Backend URL:', API_BASE_URL); // Debug log
 
